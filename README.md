@@ -1,4 +1,4 @@
-#Small Script To Interact With Youtube
+# Small Script To Interact With Youtube
 
 ## Usage
 
