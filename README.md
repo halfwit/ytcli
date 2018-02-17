@@ -2,18 +2,20 @@
 
 ## Usage
 
+```
 ytcli [action]
 
 Actions:
 	search	<keyword>
 		will return a list of URLs and descritions
-		using --thumbs will also return the path to a thumbnail (in /tmp)
+		using -t will also return the path to a thumbnail (in /tmp)
 	user	<username>
 		will return a list of videos by user
 	channel	<channel name>
 		will return a list of videos by channel
 	channel-id <channel name>
 		will return channel id of given channel
+```
 
 ## Configuration
 
