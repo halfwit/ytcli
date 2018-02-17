@@ -1,11 +1,5 @@
 #!/bin/sh
 
-# TODO: Searching by normal tokens
-# TODO: Searching by user
-# TODO: Searching by channel
-# TODO: Fetch channel ID
-# TODO: Fetch images
-
 CFG="$XDG_CONFIG_HOME/ytcli/config"
 API="https://www.googleapis.com/youtube/v3/search?part=snippet"
 THUMB=
@@ -15,7 +9,8 @@ cat <<USAGE
 Will return a list of [thumbs], URLs, and Descriptions for a given search.
 'chanid' will return the ID of a named channel
 Usage: 
-	ytctl [-t] [search|playlist|user|channel|chanid] KEYWORD
+	ytctl [-t] [search|playlist|user|channel] KEYWORD
+	ytctl [channel-id] KEYWORD
 USAGE
 }
 
@@ -77,6 +72,7 @@ playlist() {
 	get "$API&maxResults=$(max_results)&key=$(key)&type=playlist&q=$@" playlist
 }
 
+# TODO: Verify this is working
 user() {
 	url="https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forUsername=$@&key=$(key)"
 	pid="$(curl -s "$url" | jshon -CQ -e items -e -id -e id -u)"

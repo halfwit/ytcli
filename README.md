@@ -10,6 +10,8 @@ Actions:
 		will return a list of URLs and descritions
 	user	<username>
 		will return a list of videos by user
+	playlist
+		will return a list of playlists
 	channel	<channel name>
 		will return a list of videos by channel
 	channel-id <channel name>
