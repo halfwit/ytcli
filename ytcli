@@ -6,11 +6,10 @@ THUMB=
 
 usage() {
 cat <<USAGE
-Will return a list of [thumbs], URLs, and Descriptions for a given search.
-'chanid' will return the ID of a named channel
+Return a list of URLs, and Descriptions, and optionally thumbs for a given search. channel-id will return the ID of a named channel
 Usage: 
-	ytctl [-t] [search|playlist|user|channel] KEYWORD
-	ytctl [channel-id] KEYWORD
+	ytcli [search|playlist|user|channel] [-t] KEYWORD
+	ytcli [channel-id] KEYWORD
 USAGE
 }
 
@@ -21,6 +20,10 @@ key() {
 
 max_results() {
 	sed -n 's/max_results=//p' "$CFG"
+}
+
+clean() {
+	printf '%s\n' "$@" | tr '\n' '+' | sed 's/+$/\n/'
 }
 
 parse () {
@@ -85,6 +88,12 @@ channel() {
 
 ## Main ## 
 
+# Early exit of only one argument
+if test $# -lt 2; then
+	usage
+	exit 1
+fi
+
 # Scrub out our flag
 if test $2 = "-t"; then
 	THUMB="$1"
@@ -92,11 +101,12 @@ if test $2 = "-t"; then
 	set -- "$THUMB" "$@"
 fi
 
+# Handle our args
 case $1 in
-	search)		shift && search		"$@" ;;
-	playlist)   shift && playlist	"$@" ;;
-	user)		shift && user   	"$@" ;;
-	channel) 	shift && channel 	"$@" ;;
-	channel-id)	shift && chanid	"$@" ;;
+	search)		shift && search		"$(clean "$@")\n" ;;
+	playlist)   shift && playlist	"$(clean "$@")\n" ;;
+	user)		shift && user   	"$(clean "$@")\n" ;;
+	channel) 	shift && channel 	"$(clean "$@")\n" ;;
+	channel-id)	shift && chanid		"$(clean "$@")\n" ;;
 	*) usage ;;
 esac
