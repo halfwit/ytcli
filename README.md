@@ -5,7 +5,7 @@
 ytcli [action]
 
 Actions:
-	search	<keywoard>
+	search	<keyword>
 		will return a list of URLs and descritions
 		using --thumbs will also return the path to a thumbnail (in /tmp)
 	user	<username>

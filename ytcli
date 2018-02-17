@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# TODO: Searching by normal tokens
+# TODO: Searching by user
+# TODO: Searching by channel
+# TODO: Fetch channel ID
+# TODO: Fetch images
+
+usage() {
+cat <<USAGE
+Usage: 
+	ytctl [search|search -t] KEYWORD
+	ytctl [user|channel|channel-id] KEYWORD
+
+Will return a list of [thumbs], URLs, and Descriptions for a given search.
+USAGE
+}
+
+# Scrub out our flag
+if test $2 = "-t"; then
+	THUMB="$1"
+	shift && shift
+	set -- "$THUMB" "$@"
+fi
+
+case $1 in
+	search)		shift && search 	"$@" ;;
+	user)		shift && user   	"$@" ;;
+	channel) 	shift && channel 	"$@" ;;
+	channel-id)	shift && channel-id "$@" ;;
+	*) usage ;;
+esac
