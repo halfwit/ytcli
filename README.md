@@ -3,18 +3,19 @@
 ## Usage
 
 ```
-ytcli [action]
+ytcli [-t] [action]
 
 Actions:
 	search	<keyword>
 		will return a list of URLs and descritions
-		using -t will also return the path to a thumbnail (in /tmp)
 	user	<username>
 		will return a list of videos by user
 	channel	<channel name>
 		will return a list of videos by channel
 	channel-id <channel name>
 		will return channel id of given channel
+	-t 
+		return thumbnail as well
 ```
 
 ## Configuration
@@ -28,5 +29,4 @@ Example:
 # Lines starting with # will be ignored
 key=4TNSHS543tn5hNSTH54354
 max_results=50
-tmpdir=/tmp/yt
 ```

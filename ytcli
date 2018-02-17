@@ -6,15 +6,88 @@
 # TODO: Fetch channel ID
 # TODO: Fetch images
 
+CFG="$XDG_CONFIG_HOME/ytcli/config"
+API="https://www.googleapis.com/youtube/v3/search?part=snippet"
+THUMB=
+
 usage() {
 cat <<USAGE
-Usage: 
-	ytctl [search|search -t] KEYWORD
-	ytctl [user|channel|channel-id] KEYWORD
-
 Will return a list of [thumbs], URLs, and Descriptions for a given search.
+'chanid' will return the ID of a named channel
+Usage: 
+	ytctl [-t] [search|playlist|user|channel|chanid] KEYWORD
 USAGE
 }
+
+# Helper functions
+key() {
+	sed -n 's/key=//p' "$CFG"
+}
+
+max_results() {
+	sed -n 's/max_results=//p' "$CFG"
+}
+
+parse () {
+	jshon -CQ -e items -a -e snippet -e title -uppe id -e "$1"Id -u
+}
+
+parse_t () {
+	jshon -CQ -e items -a -e snippet -e title -uppe id -e "$1"Id -uppe snippet -e thumbnails -e high -e url -u
+}
+
+# We get back just a token from the search, so append it to create a full url to the video
+fixurl_t() {
+	while {
+		read -r description
+		read -r url
+		read -r image
+	} do
+		printf '%s\n%s\n%s\n' "$description" "https://www.youtube.com/watch?v=$url" "$image"
+	done
+}
+
+fixurl() {
+	while {
+		read -r description
+		read -r url
+	} do
+		printf '%s\n%s\n' "$description" "https://www.youtube.com/watch?v=$url"
+	done
+}
+
+get() {
+	if test 0 -lt ${#THUMB} ; then 
+		curl -s "$1" | parse_t "$2" | fixurl_t
+	else
+		curl -s "$1" | parse "$2"   | fixurl
+	fi
+}
+
+chanid() {
+	url="https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&q=$@&type=channel&key=$(key)" 
+	curl -s "$url" | jshon -CQ -e items -e id -e id -e channelId -u
+}
+
+search() {
+	get "$API&maxResults=$(max_results)&key=$(key)&type=video&q=$@" video
+}
+
+playlist() {
+	get "$API&maxResults=$(max_results)&key=$(key)&type=playlist&q=$@" playlist
+}
+
+user() {
+	url="https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forUsername=$@&key=$(key)"
+	pid="$(curl -s "$url" | jshon -CQ -e items -e -id -e id -u)"
+	get "https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$(max_results)&playlistId=$pid&key=$(key)" video
+}
+
+channel() {
+	get "$API&maxResults=$(max_results)&key=$(key)&type=video&channelId=$(chanid "$@")" channel
+}
+
+## Main ## 
 
 # Scrub out our flag
 if test $2 = "-t"; then
@@ -24,9 +97,10 @@ if test $2 = "-t"; then
 fi
 
 case $1 in
-	search)		shift && search 	"$@" ;;
+	search)		shift && search		"$@" ;;
+	playlist)   shift && playlist	"$@" ;;
 	user)		shift && user   	"$@" ;;
 	channel) 	shift && channel 	"$@" ;;
-	channel-id)	shift && channel-id "$@" ;;
+	channel-id)	shift && chanid	"$@" ;;
 	*) usage ;;
 esac
