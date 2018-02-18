@@ -23,6 +23,8 @@ max_results() {
 }
 
 clean() {
+	# Take newline seperated input, output url-compatible string
+	# Remove trailing '+'
 	printf '%s\n' "$@" | tr '\n' '+' | sed 's/+$/\n/'
 }
 
