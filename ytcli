@@ -104,11 +104,11 @@ if test $2 = "-t"; then
 fi
 
 # Handle our args
-case $1 in
-	search)		shift && search		"$(clean "$@")\n" ;;
-	playlist)   shift && playlist	"$(clean "$@")\n" ;;
-	user)		shift && user   	"$(clean "$@")\n" ;;
-	channel) 	shift && channel 	"$(clean "$@")\n" ;;
-	channel-id)	shift && chanid		"$(clean "$@")\n" ;;
+case "$1" in
+	search)		shift && search		"$(clean "$@")" ;;
+	playlist)   shift && playlist	"$(clean "$@")" ;;
+	user)		shift && user   	"$(clean "$@")" ;;
+	channel) 	shift && channel 	"$(clean "$@")" ;;
+	channel-id)	shift && chanid		"$(clean "$@")" ;;
 	*) usage ;;
 esac
