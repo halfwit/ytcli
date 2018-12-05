@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CFG="$XDG_CONFIG_HOME/ytcli/config"
+CFG="${XDG_CONFIG_HOME:-$HOME/.config}/ytcli/config"
 API="https://www.googleapis.com/youtube/v3/search?part=snippet"
 THUMB=
 
@@ -25,7 +25,8 @@ max_results() {
 clean() {
 	# Take newline seperated input, output url-compatible string
 	# Remove trailing '+'
-	printf '%s\n' "$@" | tr '\n' '+' | sed 's/+$/\n/'
+	printf '%s\n' "$@" | tr '\n' '+' | sed 's/+$/\
+/'
 }
 
 parse () {
@@ -106,7 +107,7 @@ fi
 # Handle our args
 case "$1" in
 	search)		shift && search		"$(clean "$@")" ;;
-	playlist)   shift && playlist	"$(clean "$@")" ;;
+	playlist)   	shift && playlist	"$(clean "$@")" ;;
 	user)		shift && user   	"$(clean "$@")" ;;
 	channel) 	shift && channel 	"$(clean "$@")" ;;
 	channel-id)	shift && chanid		"$(clean "$@")" ;;
