@@ -24,29 +24,31 @@ Requests:
 
 ```
 # Usage
- ytcli [ -trpucfa ] KEYWORD
+ ytcli [ -trpucf ] [ -a apikey ] KEYWORD
 	
 # Search for a list of videos matching string
-ytcli <string>
+ytcli <query>
 
 # Search for videos related to url
 ytcli -r 'https://youtube.com/someurl'
 
 # Search for playlists matching strings
-ytcli -p <string>
+ytcli -p <query>
 
 # List of videos by user
-ytcli -u <user>
+ytcli -u <user name>
 
 # List of playlits by user
-ytcli -u -p <user>
+ytcli -u -p <user name>
 
 # List of videos by channel
-ytcli -c <channel>
+ytcli -c <channel name>
 
+# List of playlists by channel
+ytcli -c -p <channel name>
 
 # Link to channels' RSS feed
-ytcli -f <channel>
+ytcli -f <channel name>
 
 # Normally ytcli will query the factotum for an API key (this requires plan9port, plan9, etc)
 # To set a key explicitely:
@@ -55,4 +57,5 @@ ytcli -a myapikey
 # Include thumbnails
 -t 
 
+```
 

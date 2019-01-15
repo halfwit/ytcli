@@ -14,14 +14,15 @@ import (
 )
 
 var (
-	//username = flag.String("u", "", "List videos uploaded by user")
 	apiKey	 = flag.String("a", "", "Use API key instead of factotum")
 	nresults = flag.Int64("m", 50, "Number of results per query")
 	playlist = flag.Bool("p", false, "List playlists that match query")
+	username = flag.Bool("u", false, "List videos uploaded by user")
 	channel  = flag.Bool("c", false, "List videos uploaded by channel")
-	//thumbs   = flag.Bool("t", false, "Return link to thumbnail as well")
 	related  = flag.Bool("r", false, "List videos related to <URL>")
 	feed     = flag.Bool("f", false, "Return link to RSS feed of user/channel (Can be used with -c, -u, or a video URL)")
+        thumbs   = flag.Bool("t", false, "Return link to thumbnail as well")
+
 )
 
 
