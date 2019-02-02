@@ -9,7 +9,7 @@ import (
 	"google.golang.org/api/youtube/v3"
 )
 
-var yt = "https://youtu.be/"
+var yt = "https://www.youtube.com/watch?v="
 
 func playlistSearch(query string, service *youtube.Service) map[string]string {
 	results := make(map[string]string)

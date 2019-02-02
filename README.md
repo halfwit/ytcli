@@ -1,5 +1,6 @@
 # ytcli - POSIX sh
 
+
 ## Installation:
 
 	just include in your path. 
@@ -38,7 +39,7 @@ ytcli -p <query>
 # List of videos by user
 ytcli -u <user name>
 
-# List of playlits by user
+# List of playlists by user
 ytcli -u -p <user name>
 
 # List of videos by channel
@@ -58,4 +59,6 @@ ytcli -a myapikey
 -t 
 
 ```
+
+# API Keys
 
