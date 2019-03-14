@@ -92,7 +92,8 @@ func feedSearch(query string, service *youtube.Service) map[string]string {
 			}
 		}
 	} else {
-		// TODO: Remove unwanted group 
+		// TODO: Remove unwanted group matches from this regex
+		// This was slapped out pretty quickly
 		r := regexp.MustCompile(`^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$`)
 		vid := r.FindStringSubmatch(query)
 		call := service.Videos.List("id,snippet").Id(vid[5])
