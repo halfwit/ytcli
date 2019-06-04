@@ -9,11 +9,11 @@ import (
 	"google.golang.org/api/youtube/v3"
 )
 
-var yt = "https://www.youtube.com/watch?feeds=items/VideoId,items/snippet/title,items/snippet/thumbnails/high/url&v="
+var yt = "https://www.youtube.com/watch?v="
 
 func playlistSearch(query string, service *youtube.Service) map[string]string {
 	results := make(map[string]string)
-	call := service.Search.List("id,snippet").Q(query).MaxResults(*nresults)
+	call := service.Search.List("id,snippet").Q(query).MaxResults(*nresults).Fields("items(id(kind, playlistId), snippet(thumbnails/default/url, title))")
 	response, err := call.Do()
 	if err != nil {
 		log.Fatal(err)
@@ -34,12 +34,12 @@ func playlistSearch(query string, service *youtube.Service) map[string]string {
 func channelSearch(query string, service *youtube.Service) map[string]string {
 	// Fetch channel ID
 	results := make(map[string]string)
-	call := service.Search.List("id,snippet").Q(query).MaxResults(1)
+	call := service.Search.List("id,snippet").Q(query).MaxResults(1).Fields("items/id/channelId")
 	id, err := call.Do()
 	if err != nil {
 		log.Fatal(err)
 	}
-	call2 := service.Search.List("id,snippet").MaxResults(*nresults).ChannelId(id.Items[0].Id.ChannelId)
+	call2 := service.Search.List("id,snippet").MaxResults(*nresults).ChannelId(id.Items[0].Id.ChannelId).Fields("items(id/kind, id/videoId, snippet/thumbnails/default/url, snippet/title)")
 	response, err := call2.Do()
 	if err != nil {
 		log.Fatal(err)
@@ -59,7 +59,7 @@ func channelSearch(query string, service *youtube.Service) map[string]string {
 
 func normalSearch(query string, service *youtube.Service) map[string]string {
 	results := make(map[string]string)
-	call := service.Search.List("id,snippet").Q(query).MaxResults(*nresults)
+	call := service.Search.List("id,snippet").Q(query).MaxResults(*nresults).Fields("items(id/kind, id/videoId, snippet(title, thumbnails/default/url))")
 	response, err := call.Do()
 	if err != nil {
 		log.Fatal(err)
@@ -81,7 +81,7 @@ func feedSearch(query string, service *youtube.Service) map[string]string {
 	results := make(map[string]string)
 	feed := "https://youtube.com/feeds/video.xml?channel_id="
 	if *channel {
-		call := service.Search.List("id,snippet").Q(query).MaxResults(*nresults)
+		call := service.Search.List("id,snippet").Q(query).MaxResults(*nresults).Fields("items(id/kind, id/channelId, snippet/title)")
 		response, err := call.Do()
 		if err != nil {
 			log.Fatal(err)
@@ -96,7 +96,7 @@ func feedSearch(query string, service *youtube.Service) map[string]string {
 		// This was slapped out pretty quickly
 		r := regexp.MustCompile(`^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$`)
 		vid := r.FindStringSubmatch(query)
-		call := service.Videos.List("id,snippet").Id(vid[5])
+		call := service.Videos.List("id,snippet").Id(vid[5]).Fields("item/snippet(channelId, channelTitle)")
 		response, err := call.Do()
 		if err != nil {
 			log.Fatal(err)
@@ -112,7 +112,7 @@ func relatedSearch(query string, service *youtube.Service) map[string]string{
 	results := make(map[string]string)
 	r := regexp.MustCompile(`^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$`)
 	vid := r.FindStringSubmatch(query)
-	call := service.Search.List("id,snippet").RelatedToVideoId(vid[5]).MaxResults(*nresults).Type("video")
+	call := service.Search.List("id,snippet").RelatedToVideoId(vid[5]).MaxResults(*nresults).Type("video").Fields("items(id/videoId, snippet(thumbnails/default/url, title))")
 	response, err := call.Do()
 	if err != nil {
 		log.Fatal(err)
