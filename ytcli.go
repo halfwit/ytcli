@@ -10,7 +10,7 @@ import (
 
 	"google.golang.org/api/googleapi/transport"
 	"google.golang.org/api/youtube/v3"
-	"bitbucket.org/mischief/libauth"
+	"github.com/Plan9-Archive/libauth"
 )
 
 var (
