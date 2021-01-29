@@ -62,3 +62,8 @@ ytcli -a myapikey
 
 # API Keys
 
+1. Navigate to https://console.developers.google.com/apis/credentials (log in with your Google account if required) 
+2. Create a new project, labelled `ytcli`
+3. Enable Youtube v3 API usage
+4. Create new credentials, selecting to use an API key
+5. Add this key to your local factotum, or simply pass it along with the `-a` flag to ytcli
