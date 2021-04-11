@@ -38,7 +38,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		key, err := libauth.Getuserpasswd( "proto=pass service=ytcli user=%s", 
+		key, err := libauth.Getuserpasswd( "role=client proto=pass service=ytcli user=%s", 
 			u.Username,
 		)
 		if err != nil {
